@@ -8,7 +8,7 @@ import { ApiError } from "../utils/apiError.js"
  * @get method
  * @access puplic 
  * @path /subCategory
- * 
+ 
 */
 export const getAll_subCategory = asyncHandler(async (req, res) => {
   let page = req.query.page * 1 || 1
