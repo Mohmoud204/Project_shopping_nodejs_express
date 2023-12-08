@@ -97,3 +97,4 @@ export const deleteById = asyncHandler(async (req, res) => {
   }
   return res.status(201).json({ mess: "Deleted successfully" })
 })
+

@@ -1,5 +1,5 @@
 import express from "express"
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 import { vaild } from "../validation/Subcategory_vaild.js"
 import { paramsid } from "../validation/Category.js"
 import { create_subCategory, getAll_subCategory, GetById, putById, deleteById } from "../controllers/SubCategory_controller.js"

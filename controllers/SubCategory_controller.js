@@ -14,7 +14,13 @@ export const getAll_subCategory = asyncHandler(async (req, res) => {
   let page = req.query.page * 1 || 1
   let limit = req.query.limit * 1 || 5
   let skip = (page - 1) * limit
-  const category = await Subcategory_Model.find({}).skip(skip).limit(limit).populate({ path: 'category', select: "name" })
+  console.log(req.params.categoryId)
+  let filterObject = {}
+  if (req.params.categoryId) {
+    filterObject = { category: req.params.categoryId }
+  }
+  console.log(filterObject)
+  const category = await Subcategory_Model.find(filterObject).skip(skip).limit(limit)
   return res.status(200).json({ results: category.length, page, data: category })
 })
 /*
@@ -47,7 +53,7 @@ export const GetById = asyncHandler(async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const category = await Subcategory_Model.findById(id).populate({ path: 'category', select: "name" })
+  const category = await Subcategory_Model.findById(id)
   if (!category) {
     return next(new ApiError(`No category for this id ${id}`, 404))
   }
@@ -66,7 +72,7 @@ export const putById = asyncHandler(async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   const category = await Subcategory_Model.findOneAndUpdate({ _id: id },
-    { name, slug: slugify(name) }, { new: true }).populate({ path: 'category', select: "name" })
+    { name, slug: slugify(name) }, { new: true })
   if (!category) {
     return next(new ApiError(`No category for this id ${id}`, 404))
   }
