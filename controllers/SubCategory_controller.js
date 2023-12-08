@@ -14,12 +14,12 @@ export const getAll_subCategory = asyncHandler(async (req, res) => {
   let page = req.query.page * 1 || 1
   let limit = req.query.limit * 1 || 5
   let skip = (page - 1) * limit
-  console.log(req.params.categoryId)
+
   let filterObject = {}
   if (req.params.categoryId) {
     filterObject = { category: req.params.categoryId }
   }
-  console.log(filterObject)
+
   const category = await Subcategory_Model.find(filterObject).skip(skip).limit(limit)
   return res.status(200).json({ results: category.length, page, data: category })
 })
