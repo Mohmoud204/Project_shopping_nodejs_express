@@ -11,9 +11,10 @@ export const vaild = () => {
       .notEmpty()
       .withMessage('Name is required'),
     check("category")
-    .notEmpty()
-    .withMessage('subCategory must be belong to category')
-    .isMongoId()
-    .withMessage("Invalid category ")
+      .notEmpty()
+      .withMessage('subCategory must be belong to category')
+      .isMongoId()
+      .withMessage("Invalid category ")
   ]
 }
+

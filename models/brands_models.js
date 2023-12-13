@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const subcategorySchema = new mongoose.Schema({
+const BrandSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Category required"],
@@ -19,14 +19,9 @@ const subcategorySchema = new mongoose.Schema({
       url: "",
       publicId: null
     }
-  },
-  category: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Category",
-    required: [true, "SubCategory must be belong to main parent category"]
   }
 }, { timestamps: true });
 
-export const Subcategory_Model = mongoose.model('SubCategory', subcategorySchema);
+export const Brand_Model = mongoose.model('Brand', BrandSchema);
 
 

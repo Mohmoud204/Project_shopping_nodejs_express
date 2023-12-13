@@ -1,70 +1,67 @@
-import { Subcategory_Model } from "../models/Subcategory.js"
+import { Brand_Model } from "../models/brands_models.js"
 import slugify from 'slugify'
 import asyncHandler from 'express-async-handler'
 import { validationResult } from 'express-validator'
 import { ApiError } from "../utils/apiError.js"
-
-/*
- * @desc getAll Brand 
- * @get method
- * @access puplic 
- * @path /Brand
- 
+/** @method get
+*  @router category
+* @public
 */
-export const getAll_subCategory = asyncHandler(async (req, res) => {
+export const getAllCategory = asyncHandler(async (req, res) => {
   let page = req.query.page * 1 || 1
   let limit = req.query.limit * 1 || 5
   let skip = (page - 1) * limit
-
-  let filterObject = {}
-  if (req.params.categoryId) {
-    filterObject = { category: req.params.categoryId }
-  }
-
-  const category = await Subcategory_Model.find(filterObject).skip(skip).limit(limit)
+  const category = await Brand_Model.find({}).skip(skip).limit(limit)
   return res.status(200).json({ results: category.length, page, data: category })
 })
-/*
- * @desc create Brand 
- * @Post method
- * @access private 
- * @path /Brand
- */
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+/**
+@method post
+@router category
+@private
+*/
+export const createCategory = asyncHandler(async (req, res) => {
+  const { name } = req.body
 
-export const create_subCategory = asyncHandler(async (req, res) => {
-
-  const { name, category } = req.body
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const newCategory = await Subcategory_Model.create({
-    name, slug: slugify(name), category
+  const newCategory = await Brand_Model.create({
+    name, slug: slugify(name)
   })
   const save = await newCategory.save()
   return res.status(201).json({ category: save })
 })
-/*
-@pablic
-@ get 
-get data by id 
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+/**
+* @desc get by id
+* @Get mothod
+* @public
 */
-export const GetById = asyncHandler(async (req, res, next) => {
+export const GetById = asyncHandler(async (req, res) => {
   const { id } = req.params
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const category = await Subcategory_Model.findById(id)
+  const category = await Brand_Model.findById(id)
   if (!category) {
     return next(new ApiError(`No category for this id ${id}`, 404))
   }
   return res.status(200).json({ data: category })
 })
-/*
-@private
-@put 
-put data by id 
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+/**
+* @desc put by id
+* @put mothod
+* @private
 */
 export const putById = asyncHandler(async (req, res) => {
   const { id } = req.params
@@ -73,10 +70,10 @@ export const putById = asyncHandler(async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const category = await Subcategory_Model.findOneAndUpdate({ _id: id },
+  const category = await Brand_Model.findOneAndUpdate({ _id: id },
     { name, slug: slugify(name) }, { new: true })
   if (!category) {
-    return next(new ApiError(`No category for this id ${id}`, 404))
+    return res.status(404).json({ mess: `No category for this id ${id}` })
   }
   return res.status(201).json({ data: category })
 })
@@ -84,19 +81,19 @@ export const putById = asyncHandler(async (req, res) => {
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 /**
- * @desc delet by id 
- * @delet mothod
- * @private
- */
+* @desc delet by id
+* @delet mothod
+* @private
+*/
 export const deleteById = asyncHandler(async (req, res) => {
   const { id } = req.params
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const category = await Subcategory_Model.findByIdAndDelete(id);
+  const category = await Brand_Model.findByIdAndDelete(id);
   if (!category) {
-    return next(new ApiError(`No category for this id ${id}`, 404))
+    return res.status(404).json({ mess: `No category for this id ${id}` })
   }
   return res.status(201).json({ mess: "Deleted successfully" })
 })

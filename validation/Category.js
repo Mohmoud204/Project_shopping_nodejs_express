@@ -16,9 +16,9 @@ export const vaild = () => {
 export const paramsid = () => {
   return [
     check("id")
-    .notEmpty()
-    .withMessage('subCategory must be belong to category')
-    .isMongoId()
-    .withMessage("Invalid category id format")
+      .notEmpty()
+      .withMessage('subCategory must be belong to category')
+      .isMongoId()
+      .withMessage("Invalid category id format")
   ]
 }
